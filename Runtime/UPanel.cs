@@ -21,7 +21,7 @@ namespace UScreens
         protected virtual void OnValidate() 
         {
 #if UNITY_EDITOR
-            (panelAnim ??= GetPanelAnim()).Validate(this);
+            (panelAnim ??= GetPanelAnim())?.Validate(this);
 #endif        
         }
 
@@ -29,12 +29,13 @@ namespace UScreens
         {
             if(hideBtn)
                 hideBtn.onClick.AddListener(HideClicked);
-            (panelAnim = GetPanelAnim()).Initialize(this);
+            (panelAnim = GetPanelAnim())?.Initialize(this);
         }
 
         public virtual void Show()
         {
-            panelAnim.Show();
+            panelAnim?.Show();
+            transform.SetAsLastSibling();
             gameObject.SetActive(true);
         }
 
@@ -43,8 +44,13 @@ namespace UScreens
             if (!IsShowing)
                 return;
 
-            currentHideDuration = panelAnim.Hide();
-            StartCoroutine(HideAnimation());
+            if (panelAnim != null)
+            {
+                currentHideDuration = panelAnim.Hide();
+                StartCoroutine(HideAnimation());
+            }
+            else
+                HideForce();
         }
 
         private IEnumerator HideAnimation()
