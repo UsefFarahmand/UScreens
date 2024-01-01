@@ -61,9 +61,8 @@ namespace UScreens
 
         public virtual void HideForce()
         {
-            gameObject.SetActive(false);
-
             _Event?.DoHide(currentHideDuration);
+            gameObject.SetActive(false);
         }
 
         protected virtual void HideClicked() =>
