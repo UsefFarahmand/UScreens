@@ -13,7 +13,7 @@ namespace UScreens
 
         [NonSerialized] protected IUPanelAnim panelAnim;
 
-        [NonSerialized] protected float currentHideDuration = .1f;
+        [SerializeField,Min(0)] protected float currentHideDuration = .1f;
 
         private PanelEvent _Event;
 
@@ -49,23 +49,22 @@ namespace UScreens
 
             if (panelAnim != null)
             {
-                currentHideDuration = panelAnim.Hide();
-                StartCoroutine(HideAnimation());
+                var animationDuration = panelAnim.Hide();
+                if (currentHideDuration < animationDuration) 
+                    currentHideDuration = animationDuration;
+                
+                Invoke(nameof(HideForce), currentHideDuration);
             }
             else
                 HideForce();
+        }
+
+        public virtual void HideForce()
+        {
+            gameObject.SetActive(false);
 
             _Event?.DoHide(currentHideDuration);
         }
-
-        private IEnumerator HideAnimation()
-        {
-            yield return new WaitForSecondsRealtime(currentHideDuration);
-            HideForce();
-        }
-
-        public virtual void HideForce() =>
-            gameObject.SetActive(false);
 
         protected virtual void HideClicked() =>
             Hide();
