@@ -7,9 +7,11 @@ namespace UScreens
     internal class PanelEvent : MonoBehaviour
     {
         [SerializeField] private UnityEvent OnShow;
-        [SerializeField] private UnityEvent<float> OnHide;
+        [SerializeField] private UnityEvent OnBeforeHide;
+        [SerializeField] private UnityEvent OnHide;
 
         public void DoShow() => OnShow?.Invoke();
-        public void DoHide(float duration) => OnHide?.Invoke(duration);
+        public void DoBeforeHide() => OnBeforeHide?.Invoke();
+        public void DoHide() => OnHide?.Invoke();
     }
 }

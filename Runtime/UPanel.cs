@@ -47,6 +47,8 @@ namespace UScreens
             if (!IsShowing)
                 return;
 
+            _Event?.DoBeforeHide();
+
             if (panelAnim != null)
             {
                 var animationDuration = panelAnim.Hide();
@@ -61,7 +63,7 @@ namespace UScreens
 
         public virtual void HideForce()
         {
-            _Event?.DoHide(currentHideDuration);
+            _Event?.DoHide();
             gameObject.SetActive(false);
         }
 
